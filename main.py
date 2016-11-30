@@ -72,6 +72,15 @@ class Perceptron():
         print(cm)
         print(trace(cm) / sum(cm))
 
+    def linreg(self, inputs, targets):
+
+        inputs = concatenate((inputs, -ones((shape(inputs)[0], 1))), axis=1)
+        beta = dot(dot(linalg.inv(dot(transpose(inputs), inputs)), transpose(inputs)), targets)
+
+        outputs = dot(inputs, beta)
+        # print shape(beta)
+        # print outputs
+        return beta
 
 inputs = array([[0, 0], [0, 1], [1, 0], [1, 1]])
 inputs2 = array([[0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 0]])
@@ -81,3 +90,31 @@ eta = 0.25
 nIterations = 15
 pcp = Perceptron(inputs, targets)
 pcp.pcntrain(inputs, targets, eta, nIterations)
+
+
+# inputs = array([[0,0],[0,1],[1,0],[1,1]])
+testin = concatenate((inputs, -ones((shape(inputs)[0], 1))), axis=1)
+
+# AND data
+ANDtargets = array([[0], [0], [0], [1]])
+# OR data
+ORtargets = array([[0], [1], [1], [1]])
+# XOR data
+XORtargets = array([[0], [1], [1], [0]])
+
+print("AND data")
+ANDbeta = pcp.linreg(inputs, ANDtargets)
+ANDout = dot(testin, ANDbeta)
+print(ANDout)
+
+print("OR data")
+ORbeta = pcp.linreg(inputs, ORtargets)
+ORout = dot(testin, ORbeta)
+print(ORout)
+
+print("XOR data")
+XORbeta = pcp.linreg(inputs, XORtargets)
+XORout = dot(testin, XORbeta)
+print(XORout)
+
+
